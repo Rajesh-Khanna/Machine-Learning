@@ -1,0 +1,65 @@
+import numpy as np
+import matplotlib.pyplot as plt
+#data
+class LinearRegression:
+	def Jteta(self,j):
+		errSum = 0
+		for i in range(len(self.x)):
+			errSum+=(np.vdot(self.x[i],self.coefficients)-self.y[i])*self.x[i][j]
+		errSum = errSum
+		return errSum
+
+	def __init__(self,alpha):
+		self.alpha = alpha
+		self.errMax = 0.00001
+
+	def fit(self,data,Y):
+		self.data = data
+		self.x = np.array(data)
+		self.mi = np.amin(self.x)
+		self.mx = np.amax(self.x)
+		z = np.zeros((len(data),1))+1
+		self.x = np.append(self.x,z,axis = 1)
+		self.y = Y
+		self.coefficients = np.zeros((len(self.x[0]),1))
+		temp = self.coefficients
+		cnt = 0
+		count = np.zeros((len(self.coefficients),1))
+		# plt.plot(self.data,self.y)
+		# print(self.mx)
+		# print(self.valu([self.mx,1]))
+		
+		while True:
+			for i in range(len(self.coefficients)):
+				if count[i]!= 1 :
+					# print(temp[i])
+					temp[i] = 1*(self.coefficients[i]-self.alpha*self.Jteta(i))
+			# 		if(abs(temp[i]-self.coefficients[i])<self.errMax):
+			# 			count[i] = 1
+			# if np.sum(count) == len(self.coefficients):
+			# 	break
+			self.coefficients = temp*1
+			cnt+=1
+			# print(temp)
+			# c = input(" ")
+			# plt.draw()
+			# plt.pause(0.0001)
+			if(cnt == 1000):
+				break
+		# print(cnt)
+
+	def valu(self,x):
+		return np.vdot(x,self.coefficients)
+
+	def draw(self):
+		pass
+		# self.predict();
+		# plt.plot([self.mi,self.mx], [self.valu([self.mi,1]),self.valu([self.mx,1])])
+		# plt.show()
+			
+LR = LinearRegression(0.001)
+x = [[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10]]
+y = [1.1,1.9,3.2,4.1,4.8,6.3,7.3,8.5,8.6,10.1]
+LR.fit(x,y)
+# LR.predict()
+print(LR.valu([1,1,1]))
